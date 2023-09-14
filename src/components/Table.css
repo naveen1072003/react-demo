@@ -5,15 +5,19 @@ body{
     height: 100%;
     margin: 0;
     padding: 0;
-    /*background-color: blue;*/
-
+    background: url("/src/components/images/back1.jpg") no-repeat;
+    background-size: 220vh 100vh;
 }
+
+
 .head h1{
     text-align: center;
     font-family: 'Poppins',sans-serif;
     color:white;
 }
-
+.head img{
+    padding-left: 8rem;
+}
 .add{
     display: flex;
     padding-right: 10rem;
@@ -152,7 +156,6 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
-    display: none;
 }
 @media only screen and (min-width: 1366px)
 {
