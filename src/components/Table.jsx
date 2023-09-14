@@ -24,8 +24,10 @@ function Table() {
 
   const [editDetails, setEditDetails] = useState({});
 
-  console.log(addFormDetails, "=====================");
-  console.log(editDetails, "??????????????????");
+  const [isDelete, setIsDelete] = useState(false);
+
+  // console.log(addFormDetails, "=====================");
+  // console.log(editDetails, "??????????????????");
   const [isFormVisible, setFormVisibile] = useState(false);
   const [isEditForm, setEditForm] = useState(false);
 
@@ -40,7 +42,7 @@ function Table() {
   // };
 
   const OnChange = (e) => {
-    if (editDetails.email === "") {
+    if (!isEditForm) {
       setaddFormDetails((addFormDetails) => ({
         ...addFormDetails,
         [e.target.name]: e.target.value,
@@ -57,16 +59,30 @@ function Table() {
 
   const add_EditApi = async () => {
     try {
-      if (editDetails.email === "") {
-        const addresponse = await axios.post(addUser_Url, {
-          ...addFormDetails,
-        });
+      const headers = {
+        Authorization: "Bearer " + localStorage.getItem("jwtToken"),
+      };
+      headers.append('GET', 'POST', 'OPTIONS');
+      if (!isEditForm) {
+        const addresponse = await axios.post(
+          addUser_Url,
+          {
+            ...addFormDetails,
+          },
+          { headers }
+        );
         console.log(addresponse);
       } else {
-        const putresponse = await axios.put(editUser_Url, {
-          ...editDetails,
-        });
+        const putresponse = await axios.put(
+          editUser_Url,
+          {
+            ...editDetails,
+          },
+          { headers }
+        );
       }
+      setEditForm(false);
+      console.log("hi");
       setFormVisibile(false);
     } catch (err) {
       console.log(err);
@@ -74,14 +90,13 @@ function Table() {
 
     setEditDetails({});
   };
-
+  // console.log(localStorage.getItem);
   // get All Users Call ======
 
   const callApi = async () => {
     try {
-      console.log(1);
       const objUsers = await axios.get(getAllUsers_Url);
-
+      // console.log(objUsers);
       setUsers(objUsers.data);
     } catch (e) {
       console.log(e);
@@ -89,21 +104,23 @@ function Table() {
   };
   useEffect(() => {
     callApi();
-  }, [isFormVisible]);
+  }, [isFormVisible, isDelete]);
 
-  console.log(editDetails, "Edit Details");
+  // console.log(editDetails, "Edit Details");
 
   // Delete User Api Call ======
 
-  const deleteApi = async () => {
+  const deleteApi = async (id) => {
     try {
-      await axios.get(deleteUser_Url);
+      console.log(id);
+      await axios.delete(deleteUser_Url + id);
+      setIsDelete(false);
     } catch (e) {
       console.log(e);
     }
   };
 
-  console.log(isEditForm, "edit form");
+  // console.log(isEditForm, "edit form");
 
   return (
     <div className="form-wrapper">
@@ -116,13 +133,13 @@ function Table() {
           Add User
         </button>
       </div>
-      {console.log(isFormVisible)}
+      {/* {console.log(isFormVisible)} */}
       {isFormVisible && (
         <div className="form-container">
           <div className="form">
             <form id="editUserForm">
               <div className="form-header">
-                <h1>{editDetails.email === "" ? "Add User" : "Edit user"} </h1>
+                <h1>{!isEditForm ? "Add User" : "Edit user"} </h1>
 
                 <button type="reset" className="btnrst" onClick={resetForm}>
                   <i className="fas fa-times"></i>
@@ -293,7 +310,10 @@ function Table() {
                       </button>
                       <button
                         className="delete"
-                        onClick={() => deleteApi(user.id)}
+                        onClick={() => {
+                          deleteApi(user.id);
+                          setIsDelete(true);
+                        }}
                         type="submit"
                       >
                         <i

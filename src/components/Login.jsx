@@ -1,13 +1,14 @@
 import "./Login.css"
 import React, { useState } from "react";
 import axios from 'axios'
+import { useNavigate } from "react-router-dom";
 
 
 function Login(){
 
    const [email, setEmail] = useState("")
    const [password, setPassword] = useState("")
-
+  const navigate = useNavigate();
 //    const axios = require('axios')
 
    async function loginSubmit(e){
@@ -19,9 +20,13 @@ function Login(){
             email: email,
             password: password
         });
-        localStorage.setItem('jwtToken',response)
+        console.log(response.data)
+        localStorage.setItem('jwtToken',response.data)
 
-        // setAuthToken(response)
+        if(response.status === 200){
+          navigate("/Table")
+        }
+
         console.log(response)
       }
       catch(err){

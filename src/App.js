@@ -1,9 +1,15 @@
-// import Login from './components/Login';
+import Login from './components/Login';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Table from './components/Table';
 
 function App() {
   return (
-    <Table/>
+    <BrowserRouter>
+    <Routes>
+    <Route path='/' element={<Login/>} />
+    <Route path='/Table' element={<Table/>} />
+    </Routes>
+    </BrowserRouter>
   );
 }
 
