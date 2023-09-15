@@ -62,14 +62,14 @@ function Table() {
       const headers = {
         Authorization: "Bearer " + localStorage.getItem("jwtToken"),
       };
-      headers.append('GET', 'POST', 'OPTIONS');
+      // headers.append('GET', 'POST', 'OPTIONS');
       if (!isEditForm) {
         const addresponse = await axios.post(
           addUser_Url,
           {
             ...addFormDetails,
           },
-          { headers }
+          { headers: headers }
         );
         console.log(addresponse);
       } else {
