@@ -5,15 +5,19 @@ import axios from "axios";
 import { useLocation } from 'react-router-dom';
 
 
-function User(email,setEmail){
+function User(){
 
   const [userList, setUsers] = useState("");
+  const headers = {
+    Authorization: "Bearer " + localStorage.getItem("jwtToken"),
+  };
   const location =useLocation();
-    console.log(location.state);
+    const email = location.state;
+    console.log(email)
     const callApi = async () => {
         try {
-            console.log("get");
-          const objUsers = await axios.get(getUser_Url + email);
+          const objUsers = await axios.get(getUser_Url+email,
+            { headers });
           console.log(objUsers.data);
           setUsers(objUsers.data);
         } catch (e) {
@@ -26,41 +30,43 @@ function User(email,setEmail){
 
 return(
     <div className='form-container1'>
+      <div className="inner">
        <div className="inner-form">
-           <h1>First name:</h1>
+           <h2>First name:</h2>
            <div className="data-field">
-            <p>{userList.firstname}</p>
+            <p>{userList.firstName}</p>
            </div>
        </div>
        <div className="inner-form">
-           <h1>Last name:</h1>
+           <h2>Last name:</h2>
            <div className="data-field">
-            <p></p>
+            <p>{userList.lastName}</p>
            </div>
        </div>
        <div className="inner-form">
-           <h1>Email:</h1>
+           <h2>Email:</h2>
            <div className="data-field">
-            <p></p>
+            <p>{userList.email}</p>
            </div>
        </div>
        <div className="inner-form">
-           <h1>Mobile number:</h1>
+           <h2>Mobile number:</h2>
            <div className="data-field">
-            <p></p>
+            <p>{userList.phNo}</p>
            </div>
        </div>
        <div className="inner-form">
-           <h1>Address:</h1>
+           <h2>Address:</h2>
            <div className="data-field">
-            <p></p>
+            <p>{userList.address}</p>
            </div>
        </div>
        <div className="inner-form">
-           <h1>Date of Birth:</h1>
+           <h2>Date of Birth:</h2>
            <div className="data-field">
-            <p></p>
+            <p>{userList.dob}</p>
            </div>
+       </div>
        </div>
     </div>
 )
