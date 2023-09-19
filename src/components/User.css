@@ -1,0 +1,18 @@
+.form-container1{
+    background-color: aqua;
+    padding-top: 10%;
+    width: 100%;
+    height: 78.5vh;
+   
+   
+}
+.inner-form{
+    background-color: azure;
+    width: 600px;
+    margin-left:auto ;
+    margin-right: auto;
+    display: flex;
+    padding-left: 3rem;
+    justify-content: left;
+    align-items:center;
+}

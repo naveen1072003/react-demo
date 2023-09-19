@@ -55,21 +55,23 @@ function Table() {
     }
   };
 
+ //JWT Header
+
+  const headers = {
+    Authorization: "Bearer " + localStorage.getItem("jwtToken"),
+  };
+
   // Add User Api Call ====
 
   const add_EditApi = async () => {
     try {
-      const headers = {
-        Authorization: "Bearer " + localStorage.getItem("jwtToken"),
-      };
-      // headers.append('GET', 'POST', 'OPTIONS');
       if (!isEditForm) {
         const addresponse = await axios.post(
           addUser_Url,
           {
             ...addFormDetails,
           },
-          { headers: headers }
+          { headers }
         );
         console.log(addresponse);
       } else {
@@ -82,7 +84,6 @@ function Table() {
         );
       }
       setEditForm(false);
-      console.log("hi");
       setFormVisibile(false);
     } catch (err) {
       console.log(err);
@@ -95,7 +96,8 @@ function Table() {
 
   const callApi = async () => {
     try {
-      const objUsers = await axios.get(getAllUsers_Url);
+      const objUsers = await axios.get(getAllUsers_Url,
+        { headers });
       // console.log(objUsers);
       setUsers(objUsers.data);
     } catch (e) {
@@ -104,7 +106,7 @@ function Table() {
   };
   useEffect(() => {
     callApi();
-  }, [isFormVisible, isDelete]);
+  }, [isFormVisible, isDelete,isEditForm]);
 
   // console.log(editDetails, "Edit Details");
 
@@ -113,7 +115,8 @@ function Table() {
   const deleteApi = async (id) => {
     try {
       console.log(id);
-      await axios.delete(deleteUser_Url + id);
+      await axios.delete(deleteUser_Url + id,
+        { headers });
       setIsDelete(false);
     } catch (e) {
       console.log(e);
@@ -125,7 +128,7 @@ function Table() {
   return (
     <div className="form-wrapper">
       <div className="head">
-        <img src={logo} alt="" width="90" height="100" />
+        <img src={logo} alt="" width="90" height="100" style={{paddingTop:10}}/>
         <h1>User Details</h1>
       </div>
       <div className="add">
@@ -133,7 +136,6 @@ function Table() {
           Add User
         </button>
       </div>
-      {/* {console.log(isFormVisible)} */}
       {isFormVisible && (
         <div className="form-container">
           <div className="form">
@@ -146,7 +148,7 @@ function Table() {
                 </button>
               </div>
               <label htmlFor="first_name">
-                First name<span> *</span>
+                First name<span style={{color:"red"}}> *</span>
               </label>
               <br />
               <input
@@ -161,7 +163,7 @@ function Table() {
               <br />
               <p id="fname"></p>
               <label htmlFor="last_name">
-                Last name <span> *</span>
+                Last name <span style={{color:"red"}}> *</span>
               </label>
               <br />
               <input
@@ -176,7 +178,7 @@ function Table() {
               <br />
               <p id="lname"></p>
               <label htmlFor="email">
-                Email <span> *</span>
+                Email <span style={{color:"red"}}> *</span>
               </label>
               <br />
               <input
@@ -193,7 +195,7 @@ function Table() {
               {!isEditForm && (
                 <div id="passId">
                   <label htmlFor="pass">
-                    Password<span> *</span>
+                    Password<span style={{color:"red"}}> *</span>
                     <i className="far fa-eye" id="togglePassword"></i>
                   </label>
                   <br />
@@ -212,7 +214,7 @@ function Table() {
                 </div>
               )}
               <label htmlFor="pno">
-                Phone No<span> *</span>
+                Phone No<span style={{color:"red"}}> *</span>
               </label>
               <br />
               <input
@@ -228,7 +230,7 @@ function Table() {
               <br />
               <p id="phno"></p>
               <label htmlFor="address">
-                Address<span> *</span>
+                Address<span style={{color:"red"}}> *</span>
               </label>
               <br />
               <textarea

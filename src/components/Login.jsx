@@ -1,13 +1,16 @@
 import "./Login.css"
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from 'axios'
 import { useNavigate } from "react-router-dom";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Login(){
 
-   const [email, setEmail] = useState("")
-   const [password, setPassword] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
+   
   const navigate = useNavigate();
 //    const axios = require('axios')
 
@@ -20,19 +23,32 @@ function Login(){
             email: email,
             password: password
         });
-        console.log(response.data)
         localStorage.setItem('jwtToken',response.data)
-
         if(response.status === 200){
-          navigate("/Table")
+          
+          // setTempEmail(email);
+          navigate("/User",{replace:true,state:email})
         }
-
-        console.log(response)
       }
       catch(err){
+         showToastMessage()
          console.log(err)
       }
+
    }
+
+   const showToastMessage = () => {
+    toast.error('Invalid User Credentials !!!', {
+      position: "top-center",
+      autoClose: 4999,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      });
+  }
 // function hidePass(){
 //     console.log("Hijhg")
 
@@ -77,19 +93,24 @@ function Login(){
     <h2>Log in</h2>
       <label>Email</label>
       <input type="email" name="email" id="userEmail" placeholder="Enter the valid email"
-       value={email} onChange={(event)=>
+       value={email} 
+      onChange={(event) =>
         setEmail(event.target.value)
-       }
+      }
+       
       />
       <i className="far fa-eye" id="togglePassword" ></i>
       <label>Password </label>
       <input type="password" name="password" id="userPass" placeholder="Enter the password" 
       value={password} 
-      onChange={(event)=>
+      onChange={(event) =>
         setPassword(event.target.value)
        }/>
       <p id="message"></p>
     <button type="submit" onClick={loginSubmit}>Submit</button>
+    <ToastContainer style={{ width: "350px",height: "20rem" ,
+    paddingTop:"20rem" ,
+    fontSize:"15px"}} />
   </div>
     </form>
 </div>
